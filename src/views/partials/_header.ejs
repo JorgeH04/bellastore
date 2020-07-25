@@ -23,10 +23,7 @@
 
 	<!--================ Preloader HTML Start ======================-->
 
-	<div class="preloader">
-		<img src="images/preloader.gif" alt="Preloader Image">
-	</div>
-
+	
 	<!--================ Preloader HTML End ======================-->
 
 	<!--================ Back to Top HTML Start ======================-->
@@ -107,7 +104,11 @@
 									<li>
 										<a href="/shopcart/"><img src="images/cart.png" alt="Cart Image"></a>
 									</li>
-									<li><span class="cart_list">02 Item</span><span class="price">Total $368</span></li>
+									<% if(session.cart) { %>
+
+									<li><span class="cart_list">02 Item</span><span class="price">Total $<%= session.cart.totalQty%></span></li>
+									<% } %>
+
 								</ul>
 							</div>
 						</nav>

@@ -54,12 +54,12 @@ router.get('/produnoindex/:page', async (req, res) => {
 
 
 router.post('/produno/new-produno',  async (req, res) => {
-  const { imagePath, product, color, talle, colorstock, tallestock, price } = req.body;
+  const { name, title, image, imagedos, imagetres, description, price } = req.body;
   const errors = [];
-  if (!imagePath) {
+  if (!image) {
     errors.push({text: 'Please Write a Title.'});
   }
-  if (!product) {
+  if (!title) {
     errors.push({text: 'Please Write a Description'});
   }
   if (!price) {
@@ -68,18 +68,112 @@ router.post('/produno/new-produno',  async (req, res) => {
   if (errors.length > 0) {
     res.render('notes/new-note', {
       errors,
-      imagePath,
-      product,
+      image,
+      title,
       price
     });
   } else {
-    const newNote = new Produno({ imagePath, product, color, talle, colorstock, tallestock, price });
+    const newNote = new Produno({ name, title, image, imagedos, imagetres, description, price });
     //newNote.user = req.user.id;
     await newNote.save();
     req.flash('success_msg', 'Note Added Successfully');
     res.redirect('/produno/add');
   }
 });
+
+
+
+/////////////////////////////////filter/////////////////////////////////////////////
+
+router.post("/filtro", function(req, res){
+  var flrtName = req.body.kitchen;
+
+  if(flrtName!='' ) {
+
+    var flterParameter={ $and:[{ name:flrtName},
+      {$and:[{},{}]}
+      ]
+       
+    }
+    }else{
+      var flterParameter={}
+  }
+  var produno =Produno.find(flterParameter);
+  produno.exec(function(err,data){
+      if(err) throw err;
+      res.render("produno/produno",{produno :data });
+
+        });
+  
+  
+});
+
+
+
+
+//////////////////////////////search///////////////////////////////
+
+router.get("/search", function(req, res){
+  var noMatch = null;
+  if(req.query.search) {
+      const regex = new RegExp(escape(req.query.search), 'gi');
+      // Get all campgrounds from DB
+      console.log(req.query.search)
+      Produno.find({title: regex}, function(err, produno){
+         if(err){
+             console.log(err);
+         } else {
+            if(produno.length < 1) {
+                noMatch = "No campgrounds match that query, please try again.";
+            }
+            res.render("produno/produno",{produno, noMatch: noMatch});
+         }
+      });
+
+  } else {
+      // Get all campgrounds from DB
+      Produno.find({}, function(err, produno){
+         if(err){
+             console.log(err);
+         } else {
+            res.render("produno/produno",{produno, noMatch: noMatch});
+         }
+      });
+  }
+});
+
+
+
+
+router.get("/searchback", function(req, res){
+  var noMatch = null;
+  if(req.query.search) {
+      const regex = new RegExp(escape(req.query.search), 'gi');
+      // Get all campgrounds from DB
+      console.log(req.query.search)
+      Produno.find({title: regex}, function(err, produno){
+         if(err){
+             console.log(err);
+         } else {
+            if(produno.length < 1) {
+                noMatch = "No campgrounds match that query, please try again.";
+            }
+            res.render("produno/new-produno",{produno, noMatch: noMatch});
+         }
+      });
+
+  } else {
+      // Get all campgrounds from DB
+      Produno.find({}, function(err, produno){
+         if(err){
+             console.log(err);
+         } else {
+            res.render("produno/produno",{produno, noMatch: noMatch});
+         }
+      });
+  }
+});
+
 
 
 
@@ -161,6 +255,10 @@ router.get('/produno/delete/:id', async (req, res) => {
 
 
 
+
+
+
+
 router.get('/addtocardproduno/:id', function(req, res, next){
   var productId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : {items: {}});
@@ -195,6 +293,15 @@ router.get('/remove/:id', function(req, res, next){
   res.redirect('/shopcart');
 });
 
+router.get('/sumar/:id', function(req, res, next){
+  var productId = req.params.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+  cart.sumar(productId);
+  req.session.cart = cart;
+  res.redirect('/shopcart');
+});
+
 
 router.get('/shopcart', function (req, res, next){
   if(!req.session.cart){
@@ -222,6 +329,19 @@ router.get('/checkout', function (req, res, next){
   var cart = new Cart(req.session.cart);
   res.render('cart/checkout', {products: cart.generateArray(), total: cart.totalPrice})
 });
+
+
+
+router.get('/prepagar', function (req, res, next){
+  if(!req.session.cart){
+    return res.render('/', {products:null})
+  }
+  var cart = new Cart(req.session.cart);
+  res.render('cart/prepagar', {products: cart.generateArray(), total: cart.totalPrice})
+});
+
+
+
 
 
 

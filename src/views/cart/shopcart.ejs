@@ -1,82 +1,138 @@
 <% include ../partials/_header %>
 
 
-<header>
-  <div class="top-area">
-      <div class="container">
-          <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-3">
-                  <p>Welcome to Bella</p>
-              </div>
-              <div class="col-lg-8 text-right col-md-8 col-sm-9">
-                  <p>Open Hours: 09:00 A.M to 08:00 P.M <span>Contact: <a href="tel:1-123-456-7890">+880 1234 567
-                              890</a></span></p>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="navigation">
-      <div class="container">
-          <div class="row">
-              <div class="col-12 p-0">
-                  <nav class="navbar navbar-expand-md navbar-light p-0">
-                      <a class="navbar-brand" href="index.html">
-                          <img src="images/logo.png" class="img-fluid" alt="Logo">
-                      </a>
-                      <ul class="add-to-cart small-cart">
-                          <li>
-                              <a href="cart.html"><img src="images/cart.png" alt="Cart Image"></a>
-                          </li>
-                      </ul>
-                      <button class="navbar-toggler" type="button" data-toggle="collapse"
-                          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                          aria-expanded="false" aria-label="Toggle navigation">
-                          <span class="fas fa-bars"></span>
-                      </button>
+<!--================ Breadcump Part HTML Start ======================-->
 
-                      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                          <ul class="navbar-nav mr-auto ml-auto">
-                              <li class="nav-item head-dropdown">
-                                  <a class="nav-link">Home <i class="fas fa-chevron-down"></i></a>
-                                  <ul>
-                                      <li><a href="index.html">Home One</a></li>
-                                      <li><a href="index2.html">Home Two</a></li>
-                                  </ul>
-                              </li>
-                              <li class="nav-item">
-                                  <a class="nav-link" href="about.html">About us</a>
-                              </li>
-                              <li class="nav-item head-dropdown">
-                                  <a class="nav-link active">Pages <i class="fas fa-chevron-down"></i></a>
-                                  <ul>
-                                      <li><a href="product-grid.html">Product Grid</a></li>
-                                      <li><a href="product-gridside.html">Product Grid Sidebar</a></li>
-                                      <li><a href="product-listview.html">Product List View</a></li>
-                                      <li><a href="product-details.html">Product Details</a></li>
-                                      <li><a href="shopping-cart.html">Shopping Cart</a></li>
-                                      <li><a href="cart.html">Checkout</a></li>
-                                      <li><a href="gallery.html">Gallery</a></li>
-                                  </ul>
-                              </li>
-                              <li class="nav-item">
-                                  <a class="nav-link" href="contact.html">Contact</a>
-                              </li>
-                              <li class="nav-item">
-                                  <a class="nav-link" href="login.html">Login/Register</a>
-                              </li>
-                          </ul>
-                          <ul class="add-to-cart">
-                              <li>
-                                  <a href="cart.html"><img src="images/cart.png" alt="Cart Image"></a>
-                              </li>
-                              <li><span class="cart_list">02 Item</span><span class="price">Total $368</span></li>
-                          </ul>
-                      </div>
-                  </nav>
-              </div>
-          </div>
-      </div>
-  </div>
-</header>
+<section id="breadcumb" style="background:url(images/grid-view/banner.jpg) no-repeat center;background-size:cover;">
+    <div class="bnr-overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center p-0">
+                    <h1>Shopping Cart</h1>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><i class="fa fa-angle-right"></i></li>
+                        <li><a href="shopping-cart.html">Shopping Cart</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--================ Breadcump Part HTML End ======================-->
+
+
+<!--================ Shoping Cart Part HTML Start ======================-->
+
+<section id="shoping-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 table-area">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Remove</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                            <% if(products) { %>
+                                <% for(var i = 0; i < products.length; i++) { %>
+                        <tr>
+                            <td>
+                                <a class="trash" href="/remove/<%= products[i].item._id %>"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                          
+                            <td class="cart-content">
+                                <div class="cart-item">
+                                    <img src="<%= products[i].item.image %>" class="img-fluid" alt="product1">
+                                </div>
+                                <div class="content">
+                                    <h3><%= products[i].item.title %></h3>
+                                    <ul>
+                                        <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                    </ul>
+                                    <h3 class="weight">Weight: 500 gm</h3>
+                                </div>
+                            </td>
+                            <td>$ <%= products[i].price %></td>
+                            <td>
+                                <a href="/sumar/<%= products[i].item._id %>" class="btn btn-black mx-1">+</a>
+                                <%= products[i].qty %>
+                                <a href="/reduce/<%= products[i].item._id %>" class="btn btn-black mx-1">-</a>
+
+                            </td>
+                            <td>$ 99.00</td>
+           
+                        </tr>
+                        
+                        <tr>
+                            <% } %>   
+                                       
+
+                                <td>
+                                        <a class="trash" href="#"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
+                                    <td class="cart-content">
+                                        <div class="cart-item">
+                                            <img src="images/shoping-cart/product2.png" class="img-fluid" alt="product1">
+                                        </div>
+                                        <div class="content">
+                                            <h3>Bella Warm Cream</h3>
+                                            <ul>
+                                                <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                                <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                                <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                                <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                                <li><a href="#"><i class="fas fa-star"></i></a></li>
+                                            </ul>
+                                            <h3 class="weight">Weight: 500 gm</h3>
+                                        </div>
+                                    </td>
+                                    <td>$ 99.00</td>
+                                    <td>01</td>
+                                    <td>$ 99.00</td>
+                                </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-3 cupon-area ph-btn">
+                <h4>Have a Coupon ?</h4>
+                <form>
+                    <input type="text" class="code" placeholder="Enter Your Code">
+                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                </form>
+                <h4 class="cart-total">Cart Total</h4>
+                <ul>
+                    <li>Cart Subtotal <span>$ 297.00</span></li>
+                    <li>Shipping <span>Free Shipping</span></li>
+                    <li>Grand Total <span>$ <%= totalPrice %></span></li>
+                </ul>
+                
+                            <% } else { %>                    
+    
+                                <% } %> 
+                <div class="noor2">
+                    <a href="/prepagar" class="abs-reflect">Iniciar Compra</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--================ Shoping Cart Part HTML End ======================-->
+
+
+
+
 
 <% include ../partials/_footer %>      
